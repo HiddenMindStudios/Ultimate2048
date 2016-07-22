@@ -16,6 +16,10 @@ label.new = function(txt, x, y, size, font, cTable)
 	return s
 end
 
+label.getText = function(self)
+  return self.text
+end
+
 label.setText = function(self, txt)
 	self.text = txt
 end

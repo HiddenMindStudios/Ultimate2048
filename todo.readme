@@ -1,0 +1,5 @@
+Delta checks common.lua
+Updater structure:
+  -Loader (checks server for updates to launcher or game, downloads updates and opens launcher)
+  -Launcher (news, store, launch game)
+  -Game(connect to leaderboards, online matches)

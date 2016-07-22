@@ -1,7 +1,7 @@
 button = {}
 button.__index  = button
 button.__class = "button"
-
+button.__imgLib = {}
 
 --button.new (Constructor)
 --[[
@@ -26,9 +26,12 @@ button.__class = "button"
 function button.new(imgName, x, y, w, h, pctX, pctY, fxnL, fnxR, fxnM)
 	local s = {}
 	setmetatable(s, button)
-	local imgHead = "Assets/" .. imgName
-	s.img = love.graphics.newImage(imgHead .. ".png")
-	s.img_hover = love.graphics.newImage(imgHead .. "_hover.png")
+  if not s.__imgLib[imgName] then
+    local imgHead = "Assets/" .. imgName
+    s.__imgLib[imgName] = love.graphics.newImage(imgHead .. ".png")
+    s.__imgLib[imgName .. "_hover"] = love.graphics.newImage(imgHead .. "_hover.png")
+  end
+  s.imgName = imgName
 	s.state = "none"
 	s.w = w
 	s.h = h
@@ -40,6 +43,11 @@ function button.new(imgName, x, y, w, h, pctX, pctY, fxnL, fnxR, fxnM)
 	s.fxn3 = fxnM
 	s.fxn2 = fxnR
 	return s
+end
+
+function button.setPos(self, x, y)
+  self.x = x
+  self.y = y
 end
 
 --[[
@@ -79,11 +87,11 @@ end
 function button.draw(self)
 	local r,g,b,a = love.graphics.getColor()
 	love.graphics.setColor({255,255,255,255})
-	local img = "img"
+  local sfx = ""
 	if self.state ~= "none" then
-		img = img .. "_" .. self.state
+		sfx = "_" .. self.state
 	end
-	love.graphics.draw(self[img], self.x, self.y, 0, self.pctX, self.pctY)
+	love.graphics.draw(self.__imgLib[self.imgName .. sfx], self.x, self.y, 0, self.pctX, self.pctY)
 	love.graphics.setColor(r,g,b,a)
 end
 

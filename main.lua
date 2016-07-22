@@ -2,17 +2,17 @@ function settingsLoader(t)
   for k, v in pairs(t) do
     if k == "gridSize" then
       v = tonumber(v)
-      if v < 0 or v > 100 then
+      if v < _settingsMin[k] or v > _settingsMax[k] then
         v = 80
       end
     elseif k == "tileCountW" then
       v = tonumber(v)
-      if v < 2 or v > 6 then
+      if v < _settingsMin[k] or v > _settingsMax[k] then
         v = 4  
       end
     elseif k == "tileCountH" then
       v = tonumber(v)
-      if v < 2 or v > 6 then
+      if v < _settingsMin[k] or v > _settingsMax[k] then
         v = 4
       end
     elseif k == "tileColorScheme" then
@@ -25,23 +25,6 @@ function settingsLoader(t)
       end
       if not pass then
         v = tileColors[1]
-      end
-    elseif k == "w" or k == "h" then
-      print("Dim Check")
-      w = 0
-      h = 0
-      goodDim = false
-      for _, dim in pairs(ScreenModes) do
-        if dim.w == v and dim.h == t.h then
-          print("goodDim")
-          goodDim = true
-          _settings.h = t.h
-          break
-        end
-      end
-      if not goodDim then
-        dim = ScreenModes[math.floor(#ScreenModes/2)]
-        v, _settings.h = dim.width, dim.height
       end
     elseif k == "fullscreenType" then
       if v ~= "desktop" and v ~= "exclusive" then
@@ -63,7 +46,28 @@ function settingsLoader(t)
         v = 1
       end
     end
-    _settings[k] = v
+    if k ~= "w" or k ~= "h" then
+      _settings[k] = v
+    end
+  end
+  _data.resLoad()
+  print("Dim Check")
+  w = 0
+  h = 0
+  goodDim = false
+  for _, dim in ipairs(ScreenModes) do
+    if dim.width == (tonumber(t.w)) and dim.height == (tonumber(t.h)) then
+      print("goodDim")
+      goodDim = true
+      _settings.w = t.w
+      _settings.h = t.h
+      break
+    end
+  end
+  if not goodDim then
+    dim = ScreenModes[#ScreenModes]
+    print("Bad Dim: Setting to " .. dim.width .. "x" .. dim.height)
+    _settings.w, _settings.h = dim.width, dim.height
   end
   local _,_, f = love.window.getMode()
   if _settings.fullscreen == 1 then

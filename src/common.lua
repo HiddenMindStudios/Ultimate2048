@@ -21,6 +21,35 @@ function _textToTable(t)
   end
 end
 
+function saveSettings()
+  local sF = love.filesystem.newFile("settings.txt")
+  sF:open("w")
+  sLoad = tableToText(_settings)
+  local test = sF:write(sLoad)
+  if not test then
+    --Probably should do something here
+  end
+  sF:close()
+end
+
+function updateResolution()
+  local _, _, f = love.window.getMode()
+  if _settings.vsync == 1 then
+    f.vsync = true
+  else
+    f.vsync = false
+  end
+  f.display = _settings.monitor
+  if _settings.fullscreen == 1 then
+    f.fullscreen = true
+  else
+    f.fullscreen = false
+  end
+  f.fullscreentype = _settings.fullscreenType
+  _data.resLoad()
+  love.window.setMode(_settings.w, _settings.h, f)
+end
+
 function textToTable(str)
   local r = {}
   local function helper(line) 

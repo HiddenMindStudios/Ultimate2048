@@ -1,8 +1,10 @@
 return{
+  --Added to Settings
   gridOutline = 0,
   gridSize = 80,
   tileCountW = 4,
   tileCountH = 4,
+  --NotAdded
   tileColorScheme = "classic",
   tileAnimations = 1,
   screenSize = {w=1920, h=1080},

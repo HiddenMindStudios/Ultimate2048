@@ -122,7 +122,7 @@ end
 Game.checkMoves = function(self, board)
   for y = 1, self.tCount.h do
     for x = 1, self.tCount.w do
-      if board[x][y].val == 2048 then
+      if board[x][y].val >= 2048 then
         self.counting = false
         self.canMove = false
         return
@@ -262,16 +262,21 @@ Game.init = function(self, w, h)
       end
     end
     self.sizeW = self.maxGrid/self.tCount.w
-    self.gridW = self.sizeW % math.floor(self.sizeW) / self.tCount.w
-    if self.gridW < 1 then
-      self.sizeW = self.sizeW - self.tCount.w
-      self.gridW = self.tCount.w
-    end
     self.sizeH = self.maxGrid/self.tCount.h
-    self.gridH = self.sizeH % math.floor(self.sizeH) / self.tCount.h
-    if self.gridH < 1 then
-      self.sizeH = self.sizeH - self.tCount.h
-      self.gridH = self.tCount.h
+    if _settings.gridOutline == 1 then
+      self.gridW = self.sizeW % math.floor(self.sizeW) / self.tCount.w
+      if self.gridW < 1 then
+        self.sizeW = self.sizeW - self.tCount.w
+        self.gridW = self.tCount.w
+      end
+      self.gridH = self.sizeH % math.floor(self.sizeH) / self.tCount.h
+      if self.gridH < 1 then
+        self.sizeH = self.sizeH - self.tCount.h
+        self.gridH = self.tCount.h
+      end
+    else
+      self.gridW = 0
+      self.gridH = 0
     end
     self:newPiece()
     self:newPiece()
@@ -323,19 +328,20 @@ Game.draw = function(self)
     love.graphics.rectangle("line", 0, 0, mG, mG)
     i = 1
     --Grid
-    while i <= self.tCount.w do
-      love.graphics.rectangle("fill", (i-1)*self.sizeW + (i-1)*self.gridW, 0, self.gridW, mG)
-      i = i + 1
-    end
-    i = 1
-    while i <= self.tCount.h do
-      love.graphics.rectangle("fill", 0, (i-1)*self.sizeH + (i-1)*self.gridH, mG, self.gridH)
-      i = i + 1
+    if _settings.gridOutline == 1 then
+      while i <= self.tCount.w do
+        love.graphics.rectangle("fill", (i-1)*self.sizeW + (i-1)*self.gridW, 0, self.gridW, mG)
+        i = i + 1
+      end
+      i = 1
+      while i <= self.tCount.h do
+        love.graphics.rectangle("fill", 0, (i-1)*self.sizeH + (i-1)*self.gridH, mG, self.gridH)
+        i = i + 1
+      end
     end
     --Grid Border
     local bGM = self.h*.7
     love.graphics.setColor(255,255,255,255)
-    love.graphics.line(bGM, 0, bGM, bGM, 0, bGM)
     --Timer + moveCount Box
     Font.setFont("std", math.ceil(.10*self.h))
     local text = self:timerToString()

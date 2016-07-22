@@ -2,12 +2,25 @@ _data = {}
 _settings = {}
 imgSize = {
 	buttonSize = {w = 1920, h = 1080},
-  splash = { w = 1920, h = 1080}
+  splash = { w = 1920, h = 1080},
+  square = { w = 1920, h = 1080}
 }
+
 tileColors = {
   "classic"
 }
-_ANIMSIZE = 64
+
+_settingsMin = {
+  gridSize = 50,
+  tileCountW = 2,
+  tileCountH = 2
+}
+
+_settingsMax = {
+  gridSize = 100,
+  tileCountW = 10,
+  tileCountH = 10
+}
 
 
 tileColorTables = {
@@ -27,12 +40,29 @@ tileColorTables = {
  [1024] = {237, 194, 046, 255},
  [2048] = {225, 038, 225, 225},
   big = {000, 000, 000, 255}
-}
+  }
 }
 ScreenModes = {}
 
+function _data.resLoad()
+  local w, h, f = love.window.getMode()
+  local m = _settings.monitor or 1
+  ScreenModes = love.window.getFullscreenModes(m)
+  table.sort(ScreenModes, function(a,b) return a.width*a.height < b.width*b.height end)
+  local gDim = false
+  for k, v in ipairs(ScreenModes) do
+    if v.width == w and v.height == h then
+      gDim = true
+    end
+  end
+  if not gDim then
+    love.window.setMode(ScreenModes[#ScreenModes].width, ScreenModes[#Screenmodes].height, f)
+  end
+  print("Total of " .. #ScreenModes .. " dimensions.")
+end
+
 function _data.init()
-  ScreenModes = love.window.getFullscreenModes()
+  _data.resLoad()
 end
 
 _data.init()

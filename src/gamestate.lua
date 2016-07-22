@@ -26,12 +26,16 @@ Gamestate.clearUI = function(self)
 end
 
 Gamestate.cycle = function(self)
-  print("cycled")
-  local w, h = love.window.getMode()
+  local w, h, f = love.window.getMode()
+  if w ~= tonumber(_settings.w) or h ~= tonumber(_settings.h) or f.display ~= _settings.monitor or (( f.fullscreen == true and _settings.fullscreen == 0) or f.fullscreen == false and _settings.fullscreen == 1) or f.fullscreentype ~= _settings.fullscreenType then
+    updateResolution()
+    w, h = love.graphics.getDimensions()
+  end
   local fxn = "load_" .. self:get()
 	self:clearUI()
 	self:load_generic()
 	States[self:get()]:init(w, h)
+  print("cycled")
 end
 
 Gamestate.load_generic = function(self)
@@ -41,6 +45,7 @@ end
 
 --ALL updates go through this function
 Gamestate.update = function(self, dt)
+  local w,h = love.graphics.getDimensions()
  for id, UICOMP in pairs(self.UI) do
 		if not UICOMP.update then
 			assert(false, UICOMP.__class)
