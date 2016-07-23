@@ -56,7 +56,7 @@ function _data.resLoad()
     end
   end
   if not gDim then
-    love.window.setMode(ScreenModes[#ScreenModes].width, ScreenModes[#Screenmodes].height, f)
+    love.window.setMode(ScreenModes[#ScreenModes].width, ScreenModes[#ScreenModes].height, f)
   end
   print("Total of " .. #ScreenModes .. " dimensions.")
 end
