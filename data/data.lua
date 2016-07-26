@@ -56,7 +56,13 @@ function _data.resLoad()
     end
   end
   if not gDim then
-    love.window.setMode(ScreenModes[#ScreenModes].width, ScreenModes[#ScreenModes].height, f)
+    ScreenModes[#ScreenModes+1] = {
+      width = w,
+      height = h
+    }
+    _settings.w = w
+    _settings.h = h
+    print("Settings changed to " .. _settings.w .. "x" .. _settings.h)
   end
   print("Total of " .. #ScreenModes .. " dimensions.")
 end

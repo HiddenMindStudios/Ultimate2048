@@ -1,11 +1,14 @@
 function love.load(args)
   --stored in order of lVer,cVer
   require("font")
-  require("base64")
-  require("bit")
-  assert(bit.blshift, "Bad")
-  Font.setFont("std", 12)
+  require("src/base64")
+  require("src/bit")
+  assert(bit.btest1, "FAIL1")
+  assert(bit.btest2, "FAIL2")
+  Font.setFont("std", 40)
   ver = {}
+  async = require('async')
+  async.load(2)
   local version = love.filesystem.newFile("ver")
   if not love.filesystem.exists("ver") then
     ver[1] = "0.0"
@@ -35,8 +38,11 @@ function requestUpdate(params, file)
     password = params[6],
     port = params[7]
   }
-  bin, e = ftp.get(ftpCon)
-  assert(bin ~= nil, e)
+  downloader = async.define("download", function()
+      local bin, e = ftp.get(ftpCon)
+      return bin, e
+    end)
+  
 end
 
 function newData(params)
@@ -58,15 +64,18 @@ function newData(params)
   end
 end
 
-function love.update()
+function love.update(dt)
   Socket.update(dt)
-  if os.time() >= self.msgTime + SOCK_TIMEOUT and self.msgTime > -1 then
+  if os.time() >= msgTime + SOCK_TIMEOUT and msgTime > -1 then
     print("Update timeout. Resending...")
     Socket.send(sockMsg)
   end
 end
 
 function love.draw()
+  local w,h = love.graphics.getDimensions()
+  local cx, cy = (w-600)/2, (h-200)/2
+  love.window.setPosition(cx, cy)
   local s = ""
   if upState == 1 then
     s = "Verifying Version..."
@@ -75,6 +84,7 @@ function love.draw()
   elseif upstate == 3 then
     s = "Update Complete."
   end
-  local x = (w-Font.getWidthOfText(s))/2
-  love.graphics.print(s, x, 0)
+  local x = (600-Font.getWidthOfText(s))/2
+  local y = (200-Font.getHeightOfText(2))/2
+  love.graphics.print(s, x, y)
 end

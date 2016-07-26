@@ -28,7 +28,7 @@ Under the MIT license.
 
 copyright(c) 2006~2007 hanzhao (abrash_han@hotmail.com)
 --]]---------------
-bit = {}
+
 do
 
 ------------------------
@@ -221,10 +221,12 @@ end
 bit = {
  -- bit operations
  bnot = bit_not,
+ btest1 = "t",
  band = bit_and,
  bor  = bit_or,
  bxor = bit_xor,
  brshift = bit_rshift,
+ btest2 = "t",
  blshift = bit_lshift,
  bxor2 = bit_xor2,
  blogic_rshift = bit_logic_rshift,
@@ -234,8 +236,8 @@ bit = {
  tonumb = tbl_to_number,
 }
 
-assert(bit.blshift, "BAD BAD BIT")
-
+assert(bit.btest1, "FAIL1")
+assert(bit.btest2, "FAIL2")
 end
 
 --[[

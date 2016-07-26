@@ -1,6 +1,7 @@
 Socket = {}
 Socket.__index = Socket
 SOCK_TIMEOUT = 30
+require("bit")
 
 SockTypeEnum = {
   firstConn = 0,

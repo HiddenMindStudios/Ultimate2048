@@ -48,6 +48,7 @@ function updateResolution()
   f.fullscreentype = _settings.fullscreenType
   _data.resLoad()
   love.window.setMode(_settings.w, _settings.h, f)
+  saveSettings()
 end
 
 function textToTable(str)
