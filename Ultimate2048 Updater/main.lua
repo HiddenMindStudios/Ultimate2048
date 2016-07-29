@@ -25,7 +25,7 @@ function love.load(args)
   require("socketHandler")
   ftp = require("socket.ftp")
   upState = 1
-  local msg = Socket.encodeData("0:" .. ver[1])
+  local msg = Socket.encodeData("0:" .. "Launch:" .. ver[1])
   Socket.send(msg)
 end
 
@@ -38,11 +38,13 @@ function requestUpdate(params, file)
     password = params[6],
     port = params[7]
   }
+  upState = 2
   downloader = async.define("download", function()
       local bin, e = ftp.get(ftpCon)
       return bin, e
     end)
-  
+  local b, e = downloader()
+  assert(b, e)
 end
 
 function newData(params)
@@ -52,7 +54,7 @@ function newData(params)
     else
       dataFile = "Ultimate2048.exe"
     end
-    requestFile(dataFile, params)
+    requestUpdate(dataFile, params)
   else
     if params[1] ~= 0 then
       print ("Bad Response!")
